@@ -28,3 +28,5 @@ jobs:
       - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
