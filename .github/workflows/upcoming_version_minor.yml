@@ -6,12 +6,17 @@ on:
       - 'feature/*'
       - 'release/[0-9]*.[0-9]*.x'
 jobs:
+  checkout_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v4
   upcoming_version_minor:
     runs-on: ubuntu-latest
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
+      volumes:
+        - ${{ github.workspace }}:/app
     steps:
-      - name: Check out the repository to the runner
-        uses: actions/checkout@v4
       - name: Print upcoming version
         run: svci version

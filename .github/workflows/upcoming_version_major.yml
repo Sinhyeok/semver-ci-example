@@ -4,12 +4,17 @@ on:
     branches:
       - 'release/[0-9]*.x.x'
 jobs:
-  upcoming_version_minor:
+  checkout_repo:
     runs-on: ubuntu-latest
-    container:
-      image: tartar4s/semver-ci:v0.3.0-rc.1
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
+  upcoming_version_major:
+    runs-on: ubuntu-latest
+    container:
+      image: tartar4s/semver-ci:v0.3.0-rc.1
+      volumes:
+        - ${{ github.workspace }}:/app
+    steps:
       - name: Print upcoming version
         run: svci version --scope major
