@@ -10,6 +10,7 @@ jobs:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
   upcoming_version_major:
+    needs: checkout_repo
     runs-on: ubuntu-latest
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
