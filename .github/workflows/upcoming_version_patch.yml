@@ -1,27 +1,16 @@
-name: CI
+name: UPCOMING_VERSION_PATCH
 on:
   push:
     branches:
       - 'hotfix/[0-9]*.[0-9]*.[0-9]*'
 jobs:
-  checkout_repo:
+  upcoming_version_patch:
     runs-on: ubuntu-latest
+    container: tartar4s/semver-ci:v0.3.0-rc.2
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
-      - uses: actions/upload-artifact@v4
-        with:
-          name: checkout_repo
-          path: ${{ github.workspace }}
-  upcoming_version_patch:
-    needs: checkout_repo
-    runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.3.0-rc.1
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: checkout_repo
-      - run: chown -R $(whoami):$(whoami) .
+      - run: git config --global --add safe.directory .
       - name: Print upcoming version
         run: svci version --scope patch
     env:

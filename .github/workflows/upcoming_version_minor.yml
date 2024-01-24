@@ -1,4 +1,4 @@
-name: CI
+name: UPCOMING_VERSION_MINOR
 on:
   push:
     branches:
