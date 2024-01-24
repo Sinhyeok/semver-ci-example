@@ -18,13 +18,11 @@ jobs:
   upcoming_version_minor:
     needs: checkout_repo
     runs-on: ubuntu-latest
-    container:
-      image: tartar4s/semver-ci:v0.3.0-rc.1
+    container: tartar4s/semver-ci:v0.3.0-rc.1
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: checkout_repo
-      - run: whoami
       - run: chown -R $(whoami):$(whoami) .
       - name: Print upcoming version
         run: svci version
