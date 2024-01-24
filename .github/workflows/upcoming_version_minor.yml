@@ -1,0 +1,17 @@
+name: CI
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'feature/*'
+      - 'release/[0-9]*.[0-9]*.x'
+jobs:
+  upcoming_version_minor:
+    runs-on: ubuntu-latest
+    container:
+      image: tartar4s/semver-ci:v0.3.0-rc.1
+    steps:
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v4
+      - name: Print upcoming version
+        run: svci version
