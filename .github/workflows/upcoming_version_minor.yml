@@ -24,5 +24,6 @@ jobs:
       volumes:
         - ${{ needs.checkout_repo.outputs.checkout-path }}:/app
     steps:
+      - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
