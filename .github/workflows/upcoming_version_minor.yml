@@ -24,6 +24,7 @@ jobs:
       volumes:
         - ${{ needs.checkout_repo.outputs.checkout-path }}:${{ github.workspace }}
     steps:
+      - run: ls -al ${{ needs.checkout_repo.outputs.checkout-path }}
       - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
