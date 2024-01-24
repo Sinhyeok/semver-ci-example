@@ -6,16 +6,21 @@ on:
 jobs:
   checkout_repo:
     runs-on: ubuntu-latest
+    outputs:
+      checkout-path: ${{ steps.set-path.outputs.path }}
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
+      - name: Set checkout path as an output
+        id: set-path
+        run: echo "path=${{ github.workspace }}" >> $GITHUB_ENV
   upcoming_version_patch:
     needs: checkout_repo
     runs-on: ubuntu-latest
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
       volumes:
-        - ${{ github.workspace }}:/app
+        - ${{ needs.checkout_repo.outputs.checkout-path }}:/app
     steps:
       - name: Print upcoming version
-        run: svci version --scope patch
+        run: version --scope patch
