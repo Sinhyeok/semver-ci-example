@@ -20,12 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
-      volumes:
-        - ${{ github.workspace }}:/app
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: checkout_repo
+      - run: chown -R $(whoami):$(whoami) .
       - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
