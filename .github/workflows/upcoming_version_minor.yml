@@ -24,8 +24,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: checkout_repo
+      - run: whoami
       - run: chown -R $(whoami):$(whoami) .
-      - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
     env:
