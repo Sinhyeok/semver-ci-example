@@ -2,29 +2,28 @@ name: CI
 on:
   push:
     branches:
-      - 'develop'
-      - 'feature/*'
-      - 'release/[0-9]*.[0-9]*.x'
+      - 'release/[0-9]*.x.x'
 jobs:
   checkout_repo:
     runs-on: ubuntu-latest
-    outputs:
-      checkout-path: ${{ steps.set-path.outputs.path }}
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
-      - name: Set checkout path as an output
-        id: set-path
-        run: echo "path=${{ github.workspace }}" >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checkout_repo
+          path: ${{ github.workspace }}
   upcoming_version_minor:
     needs: checkout_repo
     runs-on: ubuntu-latest
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
       volumes:
-        - ${{ needs.checkout_repo.outputs.checkout-path }}:${{ github.workspace }}
+        - ${{ github.workspace }}:/app
     steps:
-      - run: ls -al ${{ needs.checkout_repo.outputs.checkout-path }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: checkout_repo
       - run: pwd && ls -al
       - name: Print upcoming version
         run: svci version
