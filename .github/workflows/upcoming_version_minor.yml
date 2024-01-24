@@ -22,7 +22,7 @@ jobs:
     container:
       image: tartar4s/semver-ci:v0.3.0-rc.1
       volumes:
-        - ${{ needs.checkout_repo.outputs.checkout-path }}:/app
+        - ${{ needs.checkout_repo.outputs.checkout-path }}:${{ github.workspace }}
     steps:
       - run: pwd && ls -al
       - name: Print upcoming version
