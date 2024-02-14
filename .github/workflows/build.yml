@@ -4,13 +4,12 @@ on:
     branches:
       - 'develop'
       - 'feature/*'
-      - 'release/[0-9]*.[0-9]*.x'
-      - 'release/[0-9]*.x.x'
-      - 'hotfix/[0-9]*.[0-9]*.[0-9]*'
+      - 'release/*'
+      - 'hotfix/*'
 jobs:
   upcoming_version:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci
+    container: tartar4s/semver-ci:v0.4.0-rc.1
     outputs:
       UPCOMING_VERSION: ${{ steps.set_upcoming_version.outputs.UPCOMING_VERSION }}
     steps:
@@ -19,17 +18,11 @@ jobs:
       - run: git config --global --add safe.directory .
       - name: Set upcoming version
         id: set_upcoming_version
+        #export MAJOR='^release/[0-9]+.x.x$'
+        #export MINOR='^(develop|feature/.*|release/[0-9]+.[0-9]+.x)$'
+        #export PATCH='^hotfix/[0-9]+.[0-9]+.[0-9]+$'
         run: |
-          if [[ $GITHUB_REF == refs/heads/release/[0-9]*.x.x ]]; then
-            export SCOPE=major
-          elif [[ $GITHUB_REF == refs/heads/develop || $GITHUB_REF == refs/heads/feature/* || $GITHUB_REF == refs/heads/release/[0-9]*.[0-9]*.x ]]; then
-            export SCOPE=minor
-          elif [[ $GITHUB_REF == refs/heads/hotfix/* ]]; then
-            export SCOPE=patch
-          else
-            echo "Unsupported branch for versioning"
-            exit 1
-          fi
+          export SCOPE=$(svci scope $CI_COMMIT_BRANCH)
           echo "UPCOMING_VERSION=$(svci version)" >> "$GITHUB_OUTPUT"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
