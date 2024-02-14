@@ -9,7 +9,7 @@ on:
 jobs:
   upcoming_version:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.4.0-rc.1
+    container: tartar4s/semver-ci
     outputs:
       UPCOMING_VERSION: ${{ steps.set_upcoming_version.outputs.UPCOMING_VERSION }}
     steps:
