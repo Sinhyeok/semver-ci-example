@@ -36,9 +36,13 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     container: tartar4s/semver-ci:v0.5.0-dev.5715b9ba
-    needs: upcoming_version
+    needs: [upcoming_version, build]
     steps:
-      - run: svci tag "$TAG_NAME"
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v4
+      - run: git config --global --add safe.directory .
+      - name: Tag and push
+        run: svci tag "$TAG_NAME"
     env:
       TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
