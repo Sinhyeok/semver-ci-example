@@ -38,18 +38,14 @@ jobs:
     container: tartar4s/semver-ci:v0.5.0-dev.a3783039
     needs: [upcoming_version, build]
     steps:
-      - name: Check out the repository to the runner
-        uses: actions/checkout@v4
-      - run: git config --global --add safe.directory .
-      - name: Tag and push
+      - name: Tag
         run: |
-          env
-          svci tag "$TAG_NAME"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags" \
+            -d "{\"tag\":\"$TAG_NAME\",\"message\":\"\",\"object\":\"$GITHUB_SHA\",\"type\":\"commit\",\"tagger\":{\"name\":\"$GITHUB_ACTOR\",\"email\":\"41898282+github-actions[bot]@users.noreply.github.com\"}}"
     env:
       TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
-      GITHUB_TOKEN: ${{ secrets.GIT_PAT }}
-      RUST_BACKTRACE: 1
-      RUST_LOG: debug
-      GIT_CURL_VERBOSE: 1
-      GIT_TRACE: 1
-      GIT_TRACE_PACKET: 1
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
