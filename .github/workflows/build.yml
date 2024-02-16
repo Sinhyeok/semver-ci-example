@@ -15,13 +15,13 @@ jobs:
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v4
-      - run: git config --global --add safe.directory .
       - name: Set upcoming version
         id: set_upcoming_version
         #export MAJOR='^release/[0-9]+.x.x$'
         #export MINOR='^(develop|feature/.*|release/[0-9]+.[0-9]+.x)$'
         #export PATCH='^hotfix/[0-9]+.[0-9]+.[0-9]+$'
         run: |
+          git config --global --add safe.directory .
           export SCOPE=$(svci scope)
           echo "UPCOMING_VERSION=$(svci version)" >> "$GITHUB_OUTPUT"
     env:
@@ -35,18 +35,17 @@ jobs:
       RELEASE_TAG: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
   tag:
     runs-on: ubuntu-latest
+    container: tartar4s/semver-ci:v0.5.0-dev.a3783039
     needs: [upcoming_version, build]
     permissions:
       contents: write
     steps:
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v4
       - name: Tag
         run: |
-          curl -v -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags" \
-            -d "{\"tag\":\"$TAG_NAME\",\"message\":\"\",\"object\":\"$GITHUB_SHA\",\"type\":\"commit\",\"tagger\":{\"name\":\"$GITHUB_ACTOR\",\"email\":\"41898282+github-actions[bot]@users.noreply.github.com\"}}"
+          git config --global --add safe.directory .
+          svci tag "$TAG_NAME"
     env:
       TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
