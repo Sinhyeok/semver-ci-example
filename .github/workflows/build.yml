@@ -47,7 +47,7 @@ jobs:
           svci tag "$TAG_NAME"
     env:
       TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GIT_PAT }}
       RUST_BACKTRACE: 1
       RUST_LOG: debug
       GIT_CURL_VERBOSE: 1
