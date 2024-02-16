@@ -49,3 +49,5 @@ jobs:
       RUST_BACKTRACE: 1
       RUST_LOG: debug
       GIT_CURL_VERBOSE: 1
+      GIT_TRACE: 1
+      GIT_TRACE_PACKET: 1
