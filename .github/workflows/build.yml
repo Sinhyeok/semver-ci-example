@@ -47,3 +47,5 @@ jobs:
       TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       RUST_BACKTRACE: 1
+      RUST_LOG: debug
+      GIT_CURL_VERBOSE: 1
