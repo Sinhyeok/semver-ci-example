@@ -36,6 +36,8 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     needs: [upcoming_version, build]
+    permissions:
+      contents: write
     steps:
       - name: Tag
         run: |
