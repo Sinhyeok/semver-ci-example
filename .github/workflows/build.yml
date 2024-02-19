@@ -22,6 +22,7 @@ jobs:
           echo "UPCOMING_VERSION=$(svci version)" >> "$GITHUB_OUTPUT"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     runs-on: ubuntu-latest
     needs: upcoming_version
@@ -29,6 +30,7 @@ jobs:
       - run: echo "$RELEASE_TAG"
     env:
       RELEASE_TAG: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
+
   tag:
     runs-on: ubuntu-latest
     container: tartar4s/semver-ci:v0.5.0-dev.92d24d01
