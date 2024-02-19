@@ -33,7 +33,6 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     container: tartar4s/semver-ci:v0.5.0-dev.2581ca22
-    if: startsWith(github.ref_name, 'release/') || startsWith(github.ref_name, 'hotfix/')
     needs: [upcoming_version, build]
     permissions:
       contents: write
