@@ -11,7 +11,7 @@ on:
 jobs:
   upcoming_version:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.6.0-dev.32740354
+    container: tartar4s/semver-ci:v0.6.0-dev.722c71f7
     outputs:
       UPCOMING_VERSION: ${{ steps.set_upcoming_version.outputs.UPCOMING_VERSION }}
     steps:
@@ -33,7 +33,7 @@ jobs:
 
   tag:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.6.0-dev.32740354
+    container: tartar4s/semver-ci:v0.6.0-dev.722c71f7
     needs: [upcoming_version, build]
     permissions:
       contents: write
