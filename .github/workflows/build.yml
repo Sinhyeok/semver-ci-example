@@ -11,12 +11,11 @@ on:
 jobs:
   upcoming_version:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.6.0-dev.722c71f7
+    container: tartar4s/semver-ci:v0.6.0-dev.9425861f
     outputs:
       UPCOMING_VERSION: ${{ steps.set_upcoming_version.outputs.UPCOMING_VERSION }}
     steps:
-      - name: Set upcoming version
-        id: set_upcoming_version
+      - id: set_upcoming_version
         run: |
           export SCOPE=$(svci scope)
           echo "UPCOMING_VERSION=$(svci version)" >> "$GITHUB_OUTPUT"
@@ -31,15 +30,15 @@ jobs:
     env:
       RELEASE_TAG: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
 
-  tag:
+  release_candidate:
     runs-on: ubuntu-latest
-    container: tartar4s/semver-ci:v0.6.0-dev.722c71f7
+    container: tartar4s/semver-ci:v0.6.0-dev.9425861f
     needs: [upcoming_version, build]
     permissions:
       contents: write
     steps:
-      - name: Tag
-        run: svci tag "$TAG_NAME"
+      - run: svci release "$RELEASE_NAME"
     env:
-      TAG_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
+      RELEASE_NAME: ${{needs.upcoming_version.outputs.UPCOMING_VERSION}}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GENERATE_RELEASE_NOTES: true
