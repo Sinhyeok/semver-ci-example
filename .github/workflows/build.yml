@@ -17,9 +17,7 @@ jobs:
       UPCOMING_VERSION: ${{ steps.set_upcoming_version.outputs.UPCOMING_VERSION }}
     steps:
       - id: set_upcoming_version
-        run: |
-          export SCOPE=$(svci scope)
-          svci version >> "$GITHUB_OUTPUT"
+        run: svci version >> "$GITHUB_OUTPUT"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
